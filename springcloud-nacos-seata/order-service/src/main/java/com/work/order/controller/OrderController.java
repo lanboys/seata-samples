@@ -67,7 +67,7 @@ public class OrderController {
 
     @RequestMapping("/placeOrder")
     public Boolean placeOrder(String userId, String commodityCode, Integer count) {
-        orderService.placeOrder(userId, commodityCode, count);
+        orderService.placeOrder("1", "product-1", 1);
         return true;
     }
 }

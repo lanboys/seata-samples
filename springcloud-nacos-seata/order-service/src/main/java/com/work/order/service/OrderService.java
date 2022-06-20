@@ -50,11 +50,14 @@ public class OrderService {
     /**
      * 下单：创建订单、减库存，涉及到两个服务
      *
+     * https://mp.weixin.qq.com/s/fzlr-6pDPWKbwVuJlXe8sA
+     * https://mp.weixin.qq.com/s/6DOtO5OQyCL8bR03Z-3q9A
+     *
      * @param userId
      * @param commodityCode
      * @param count
      */
-    @GlobalTransactional
+    //@GlobalTransactional 放到business
     @Transactional(rollbackFor = Exception.class)
     public void placeOrder(String userId, String commodityCode, Integer count) {
         BigDecimal orderMoney = new BigDecimal(count).multiply(new BigDecimal(5));
@@ -62,7 +65,17 @@ public class OrderService {
             orderMoney);
         orderDAO.insert(order);
         stockFeignClient.deduct(commodityCode, count);
+    }
 
+    private void sleep(int sec) {
+        for (int i = 0; i < sec; i++) {
+            try {
+                System.out.println(">>>>>>>>>>>> sleep in " + i + " s <<<<<<<<<<<<");
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)
